@@ -1,0 +1,23 @@
+{
+  "name": "swift-glacier",
+  "version": "0.1.0",
+  "description": "swift-glacier",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src test eslint.config.js",
+    "test": "node --test \"test/**/*.test.js\"",
+    "lint:css": "stylelint \"styles/**/*.css\"",
+    "typecheck": "tsc --noEmit",
+    "test:ts": "node --test \"test/**/*.test.ts\""
+  },
+  "devDependencies": {
+    "@eslint/js": "^10",
+    "eslint": "^10",
+    "globals": "^17",
+    "stylelint": "^17",
+    "stylelint-config-standard": "^40",
+    "typescript": "^5.9",
+    "@types/node": "^24"
+  }
+}

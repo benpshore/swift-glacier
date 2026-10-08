@@ -1,0 +1,10 @@
+[package]
+name = "swift-glacier"
+version = "0.1.0"
+edition = "2024"
+description = "swift-glacier"
+
+[dependencies]
+
+[lints.clippy]
+pedantic = { level = "warn", priority = -1 }
