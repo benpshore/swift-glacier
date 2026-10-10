@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 
-repo_root=$(CDPATH= cd -- "$(dirname "$0")/../.." && pwd)
+repo_root=$(CDPATH='' cd -- "$(dirname "$0")/../.." && pwd)
 ramd=$repo_root/scripts/ramd
 test_root=$(mktemp -d "${TMPDIR:-/tmp}/ramd-tests.XXXXXX")
 mock_bin=$test_root/bin
