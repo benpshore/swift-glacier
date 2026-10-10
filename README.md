@@ -24,19 +24,20 @@ Other accounts must use a squash PR with passing, up-to-date `ci`. Agents must u
 
 ## RAM disk shell utility
 
-The read-only macOS sizing prototype is `scripts/ramd SIZE --dry-run`. Examples:
+The read-only macOS sizing prototype is `scripts/ramd SIZE --dry-run` or `scripts/ramd SIZE -n`. Examples:
 
 ```sh
 scripts/ramd 2g --dry-run
 scripts/ramd 512MB --dry-run
 scripts/ramd --dry-run 2G
+scripts/ramd 2G -n
 ```
 
 Size suffixes are case-insensitive. This implementation currently interprets `K`, `KB`, `KiB`, `M`, `MB`, `MiB`, `G`, `GB`, `GiB`, `T`, `TB`, and `TiB` as binary powers of 1024: `2g` is 2 GiB and `512MB` is 512 MiB. Ben's examples did not settle decimal versus binary units, so this is a documented implementation convention, not a confirmed interpretation. Sizes must be integral, at least 16 MiB, no larger than 1 TiB, and divisible into 512-byte sectors.
 
 The dry run reads physical RAM with `sysctl -n hw.memsize`, page availability indicators with `vm_stat`, and the macOS memory pressure level with `sysctl -n kern.memorystatus_vm_pressure_level`. It plans only at normal pressure and when the request is at most one quarter of physical RAM and at most half the current free, inactive, and speculative page estimate. These are conservative point-in-time checks, not a memory reservation. The dry run prints the intended size, sectors, and filesystem plan; it never invokes attach, format, mount, detach, `diskutil`, or `ioreg` commands.
 
-The shell process's dry-run path performs only argument parsing and the listed local reads and calculations. The mock suite puts fail-on-use shims first in `PATH` for common disk, filesystem, temporary-file, network, installer, and helper commands and asserts they are never called, including on malformed inputs and failed probes. This checks those named executable boundaries; it cannot prove the absence of every possible side effect by arbitrary programs, the shell/runtime, the operating system, or unrelated processes. No short flag alias is implemented while its spelling is pending selection.
+The shell process's dry-run path performs only argument parsing and the listed local reads and calculations. `-n` is an alias for `--dry-run`. The mock suite puts fail-on-use shims first in `PATH` for common disk, filesystem, temporary-file, network, installer, and helper commands and asserts they are never called for either flag, including on malformed inputs and failed probes. This checks those named executable boundaries; it cannot prove the absence of every possible side effect by arbitrary programs, the shell/runtime, the operating system, or unrelated processes.
 
 The memory-pressure value is not a `0, 1, 2` ordinal. `sysctl -n` prints the value without its name; the Apple `libdispatch` header defines normal, warning, and critical as `0x01`, `0x02`, and `0x04`, respectively. Apple's `memory_pressure` utility source reads `kern.memorystatus_vm_pressure_level`; the prototype accepts only exact value `1` and refuses unknown values. See [`sysctl(8)`](https://www.manpagez.com/man/8/sysctl/), [Apple's libdispatch pressure definitions](https://github.com/apple-oss-distributions/libdispatch/blob/main/dispatch/source.h), and [Apple's `memory_pressure` source](https://github.com/apple-oss-distributions/system_cmds/blob/main/memory_pressure/memory_pressure.c).
 
