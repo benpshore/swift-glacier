@@ -71,19 +71,17 @@ else
 fi
 MOCK
 
-cat >"$mock_bin/hdiutil" <<'MOCK'
+cat >"$mock_bin/blocked-command" <<'MOCK'
 #!/bin/sh
-printf 'hdiutil %s\n' "$*" >>"$MOCK_DEVICE_CALLS"
+printf '%s %s\n' "${0##*/}" "$*" >>"$MOCK_DEVICE_CALLS"
 exit 99
 MOCK
 
-cat >"$mock_bin/diskutil" <<'MOCK'
-#!/bin/sh
-printf 'diskutil %s\n' "$*" >>"$MOCK_DEVICE_CALLS"
-exit 99
-MOCK
-
-chmod +x "$mock_bin"/*
+for blocked_command in hdiutil diskutil newfs_hfs mount umount dd mktemp mkdir rm touch chmod \
+    curl wget nc netcat ssh scp sftp ftp; do
+    ln -s blocked-command "$mock_bin/$blocked_command"
+done
+chmod +x "$mock_bin/blocked-command" "$mock_bin/uname" "$mock_bin/sysctl" "$mock_bin/vm_stat" "$mock_bin/ioreg"
 
 pass() { printf 'PASS: %s\n' "$1"; }
 new_case() {
@@ -143,6 +141,18 @@ assert_output_has 'Dry run OK: 2147483648 bytes'
 assert_no_device_calls
 pass 'dry-run accepts the flag before the positional size'
 
+new_case short-alias-after
+run_ramd normal 2G -dr >"$case_dir/output" 2>&1
+assert_output_has 'Dry run OK: 2147483648 bytes'
+assert_no_device_calls
+pass '-dr is equivalent to --dry-run after the size'
+
+new_case short-alias-before
+run_ramd normal -dr 2G >"$case_dir/output" 2>&1
+assert_output_has 'Dry run OK: 2147483648 bytes'
+assert_no_device_calls
+pass '-dr is equivalent to --dry-run before the size'
+
 new_case invalid-size
 expect_failure normal 1.5GiB --dry-run
 assert_output_has 'invalid or unsupported size'
@@ -199,7 +209,7 @@ pass 'cross-object token and BSD-name output cannot reach any mutation command'
 
 new_case no-arguments
 expect_failure normal
-assert_output_has 'Usage: ramd SIZE [--dry-run]'
+assert_output_has 'Usage: ramd SIZE [--dry-run|-dr]'
 assert_no_device_calls
 pass 'missing size prints usage without device commands'
 

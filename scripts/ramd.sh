@@ -6,7 +6,7 @@ LC_ALL=C
 export LC_ALL
 
 usage() {
-    printf '%s\n' 'Usage: ramd SIZE [--dry-run]' 'Example: ramd 2g' '         ramd 512MB --dry-run' >&2
+    printf '%s\n' 'Usage: ramd SIZE [--dry-run|-dr]' 'Example: ramd 2g' '         ramd 512MB --dry-run' '         ramd 512MB -dr' >&2
 }
 
 fail() {
@@ -72,10 +72,10 @@ parse_args() {
     case $# in
         1) size_input=$1 ;;
         2)
-            if [ "$1" = '--dry-run' ]; then
+            if [ "$1" = '--dry-run' ] || [ "$1" = '-dr' ]; then
                 dry_run=1
                 size_input=$2
-            elif [ "$2" = '--dry-run' ]; then
+            elif [ "$2" = '--dry-run' ] || [ "$2" = '-dr' ]; then
                 dry_run=1
                 size_input=$1
             else
