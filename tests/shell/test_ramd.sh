@@ -78,7 +78,8 @@ exit 99
 MOCK
 
 for blocked_command in hdiutil diskutil newfs_hfs mount umount dd mktemp mkdir rm touch chmod \
-    curl wget nc netcat ssh scp sftp ftp; do
+    curl wget nc netcat ssh scp sftp ftp python python3 perl ruby osascript launchctl logger \
+    installer brew defaults open; do
     ln -s blocked-command "$mock_bin/$blocked_command"
 done
 chmod +x "$mock_bin/blocked-command" "$mock_bin/uname" "$mock_bin/sysctl" "$mock_bin/vm_stat" "$mock_bin/ioreg"
