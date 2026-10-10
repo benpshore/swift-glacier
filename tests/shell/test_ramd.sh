@@ -141,18 +141,6 @@ assert_output_has 'Dry run OK: 2147483648 bytes'
 assert_no_device_calls
 pass 'dry-run accepts the flag before the positional size'
 
-new_case short-alias-after
-run_ramd normal 2G -dr >"$case_dir/output" 2>&1
-assert_output_has 'Dry run OK: 2147483648 bytes'
-assert_no_device_calls
-pass '-dr is equivalent to --dry-run after the size'
-
-new_case short-alias-before
-run_ramd normal -dr 2G >"$case_dir/output" 2>&1
-assert_output_has 'Dry run OK: 2147483648 bytes'
-assert_no_device_calls
-pass '-dr is equivalent to --dry-run before the size'
-
 new_case invalid-size
 expect_failure normal 1.5GiB --dry-run
 assert_output_has 'invalid or unsupported size'
@@ -209,7 +197,7 @@ pass 'cross-object token and BSD-name output cannot reach any mutation command'
 
 new_case no-arguments
 expect_failure normal
-assert_output_has 'Usage: ramd SIZE [--dry-run|-dr]'
+assert_output_has 'Usage: ramd SIZE [--dry-run]'
 assert_no_device_calls
 pass 'missing size prints usage without device commands'
 

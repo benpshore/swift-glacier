@@ -1,7 +1,5 @@
 PASS: dry-run parses case-insensitive binary size forms and calls no device tools
 PASS: dry-run accepts the flag before the positional size
-PASS: -dr is equivalent to --dry-run after the size
-PASS: -dr is equivalent to --dry-run before the size
 PASS: malformed size is rejected before system or device operations
 PASS: warning pressure rejects the read-only plan
 PASS: malformed pressure output rejects the read-only plan
