@@ -1,0 +1,14 @@
+PASS: dry-run parses case-insensitive binary size forms and calls no device tools
+PASS: dry-run accepts the flag before the positional size
+PASS: -n is equivalent to --dry-run after the size
+PASS: -n is equivalent to --dry-run before the size
+PASS: malformed size is rejected before system or device operations
+PASS: warning pressure rejects the read-only plan
+PASS: malformed pressure output rejects the read-only plan
+PASS: failed physical-memory query rejects the read-only plan
+PASS: malformed available-memory output rejects the read-only plan
+PASS: Linux is rejected without a tmpfs fallback or device command
+PASS: real provisioning is explicitly disabled before any disk or registry command
+PASS: cross-object token and BSD-name output cannot reach any mutation command
+PASS: missing size prints usage without device commands
+All RAM-disk sizing prototype mock tests passed. No disk operations were performed.
