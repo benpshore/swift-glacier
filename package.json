@@ -17,7 +17,7 @@
     "globals": "^17",
     "stylelint": "^17",
     "stylelint-config-standard": "^40",
-    "typescript": "^5.9",
-    "@types/node": "^24"
+    "typescript": "^7.0",
+    "@types/node": "^26"
   }
 }
